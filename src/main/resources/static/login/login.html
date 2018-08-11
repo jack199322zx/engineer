@@ -1,0 +1,110 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <title>后台登录</title>
+    <meta name="author" content="DeathGhost">
+    <!-- loading.css -->
+    <link rel="stylesheet" type="text/css" href="/loading/css/dialog.css">
+    <link rel="stylesheet" type="text/css" href="/login/css/style.css">
+    <style>
+        body {
+            height: 100%;
+            background: #16a085;
+            overflow: hidden;
+        }
+
+        canvas {
+            z-index: -1;
+            position: absolute;
+        }
+    </style>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- loading.js -->
+    <script src="/loading/js/zepto.min.js"></script>
+    <script type="text/javascript" src="/loading/js/dialog.min.js"></script>
+    <script src="/login/js/verificationNumbers.js"></script>
+    <script src="/login/js/Particleground.js"></script>
+    <script src="/login/js/login.js"></script>
+    <!-- ajax 错误信息 -->
+    <script src="/js/errMsg.js"></script>
+    <script>
+        $(document).ready(function () {
+            //粒子背景特效
+            $('body').particleground({
+                dotColor: '#5cbdaa',
+                lineColor: '#5cbdaa'
+            });
+            //验证码
+            createCode();
+            //测试提交，对接程序删除即可
+            $(".submit_btn").click(function () {
+                location.href = "javascrpt:;"
+            });
+        });
+    </script>
+</head>
+<body>
+<canvas class="pg-canvas" width="1269" height="946"></canvas>
+<dl class="admin_login" id="admin_login">
+    <dt>
+        <strong>Login</strong>
+        <em>Management System</em>
+    </dt>
+    <dd class="user_icon">
+        <input type="text" placeholder="账号" class="login_txtbx" name="username" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    </dd>
+    <dd class="pwd_icon">
+        <input type="password" placeholder="密码" class="login_txtbx" name="password" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    </dd>
+    <dd class="val_icon">
+        <div class="checkcode">
+            <input type="text" id="J_codetext" placeholder="输入验证码" maxlength="4" class="login_txtbx">
+            <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+        </div>
+    </dd>
+    <dd>
+        <input type="button" value="立即登陆" class="submit_btn"  onclick="validate();">
+        <input type="button" value="立即注册" class="submit_btn" onclick="login_switch('#admin_login','#register');" style="float: right;margin-right: 15px;">
+    </dd>
+    <dd>
+        <p>© 2017-2018 九阁科技</p>
+    </dd>
+</dl>
+<dl class="admin_login" id="register" style="display: none">
+    <dt>
+        <strong>Register</strong>
+        <em>Management System</em>
+    </dt>
+    <dd class="user_icon">
+        <input type="text" placeholder="账号" class="login_txtbx" name="username" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    </dd>
+    <dd class="pwd_icon">
+        <input type="password" placeholder="密码" class="login_txtbx" name="password" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+    </dd>
+    <dd class="ema_icon">
+        <input type="email" placeholder="邮箱" class="login_txtbx email" id="email" name="email">
+        <button class="sdss" onclick="email_code()" id="verificationCode">获取验证码</button>
+    </dd>
+    <dd class="code_icon">
+        <input type="text" placeholder="邮箱验证码" class="login_txtbx" name="email_code"/>
+    </dd>
+    <dd class="tel_icon">
+        <input type="number" placeholder="电话" class="login_txtbx" name="telephone" autofocus="autofocus" autocomplete="off" oninput="if(value.length>11)value=value.slice(0,11)"  onkeyup="this.value=this.value.replace(/\D/g,'')"/>
+    </dd>
+    <dd class="com_icon">
+        <input type="text" placeholder="单位" class="login_txtbx" name="company">
+    </dd>
+    <dd class="dep_icon">
+        <input type="text" placeholder="部门" class="login_txtbx" name="department">
+    </dd>
+
+    <dd>
+        <input type="button" value="立即登陆" class="submit_btn"  onclick="login_switch('#register','#admin_login');">
+        <input type="button" value="立即注册" class="submit_btn" onclick="register()" style="float: right;margin-right: 15px;">
+    </dd>
+    <dd>
+        <p>© 2017-2018 九阁科技</p>
+    </dd>
+</dl>
+</body>
+</html>

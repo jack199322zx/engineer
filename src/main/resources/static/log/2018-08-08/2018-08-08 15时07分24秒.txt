@@ -1,0 +1,12 @@
+MySQL出现错误:
+errMsg:
+org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+### The error may exist in com/SQLTo_configure/mapping/Jurisdiction.xml
+### The error may involve com.SQLTo_configure.mapping.Jurisdiction.Matching_user_rights
+### The error occurred while executing a query
+### Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.

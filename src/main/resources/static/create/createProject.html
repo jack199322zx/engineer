@@ -1,0 +1,53 @@
+<div class="content-wrapper" style="min-height: 897px;">
+    <section class="content-header">
+        <h1>
+            创建项目
+            <small>create project</small>
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">快速创建</h3>
+                    </div>
+
+                    <!-- form start -->
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="por_name">项目名:</label>
+                                <input type="text" class="form-control" id="por_name"
+                                       placeholder="项目名">
+                            </div>
+                            <div class="form-group">
+                                <label for="pro_address">地址:</label>
+                                <input type="text" class="form-control" id="pro_address"
+                                       placeholder="地址(例:'北京市')">
+                                <input type="button" class="btn btn-primary" id="get_Weather" value="获取天气信息">
+                            </div>
+                            <div class="form-group">
+                                <label for="pro_address">天气:</label>
+                                <input type="text" class="form-control" id="pro_weather"
+                                       placeholder="天气">
+                            </div>
+                            <div class="form-group">
+                                <label for="pro_address">周围环境:</label>
+                                <input type="text" class="form-control" id="pro_ambient"
+                                       placeholder="周围环境">
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-primary submit">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/create/js/createProject.js"></script>

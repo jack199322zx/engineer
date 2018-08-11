@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.ConfigurationDao">
+
+
+    <!-- 读取配置 -->
+    <select id="readConfigure" resultType="com.nino.engineer.domain.Configure">
+		select id,S_APPID,S_APPKEY,S_template_Id,S_sign,QQ_Email,QQ_SMTP from configure
+	</select>
+</mapper>

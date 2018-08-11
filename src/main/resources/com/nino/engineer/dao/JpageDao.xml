@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.JpageDao">
+
+    <!-- 匹配用户登陆 -->
+    <select id="matchingLog" resultType="com.nino.engineer.domain.User">
+		select id,username from t_user where username=#{Username} and password=#{Password}
+	</select>
+
+    <!-- 邮箱是否存在 -->
+    <select id="isExistenceMailAddress" resultType="com.nino.engineer.domain.User">
+		select id,username from t_user where u_email = #{_parameter}
+	</select>
+
+    <!-- 手机号码是否存在 -->
+    <select id="isExistenceTelephone" resultType="com.nino.engineer.domain.User">
+		select id,username from t_user where u_telephone = #{_parameter}
+	</select>
+
+    <!-- 用户名是否存在 -->
+    <select id="isExistenceUsername" resultType="com.nino.engineer.domain.User">
+		select id,username from t_user where username = #{_parameter}
+	</select>
+
+    <!-- 用户ID是否存在 -->
+    <select id="isExistenceUserID" resultType="com.nino.engineer.domain.User">
+		select id,username from t_user where id = #{_parameter}
+	</select>
+
+    <!-- 注册用户-->
+    <insert id="register" parameterType="com.nino.engineer.domain.User" flushCache="true">
+		insert into
+		t_user(username,password,u_email,u_telephone,u_company,u_department)
+		values
+			(
+             #{Username},
+             #{Password},
+             #{U_email},
+             #{U_telephone},
+             #{U_company},
+             #{U_department}
+			)
+	</insert>
+
+    <!-- 查找所有用户 -->
+    <select id="lookupAllUsers" resultType="com.nino.engineer.domain.User">
+		select id,username,password,u_email,u_telephone,u_company,u_department from t_user ${_parameter}
+	</select>
+
+</mapper>

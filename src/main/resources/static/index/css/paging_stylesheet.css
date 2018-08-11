@@ -1,0 +1,39 @@
+﻿/* 分页 样式 表 */
+.layui-laypage-pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.layui-laypage-pagination>a {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.layui-laypage-pagination>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.layui-laypage-pagination>.layui-laypage-curr {
+    z-index: 3;
+    color: #fff;
+    background-color: #5eb95e;
+    border-color: #5eb95e;
+    cursor: default;
+}

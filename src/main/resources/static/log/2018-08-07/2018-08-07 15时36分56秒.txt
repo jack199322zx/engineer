@@ -1,0 +1,3 @@
+MySQL出现错误:
+errMsg:
+java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String
