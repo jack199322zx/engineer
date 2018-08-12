@@ -4,7 +4,7 @@
 
     <!-- 匹配用户登陆 -->
     <select id="matchingLog" resultType="com.nino.engineer.domain.User">
-		select id,username from t_user where username=#{Username} and password=#{Password}
+		select id,username from t_user where username= #{Username} and password=#{Password}
 	</select>
 
     <!-- 邮箱是否存在 -->
@@ -47,4 +47,89 @@
 		select id,username,password,u_email,u_telephone,u_company,u_department from t_user ${_parameter}
 	</select>
 
+	<!-- 匹配用户权限-->
+	<select id="Matching_user_rights" resultType="java.lang.Integer">
+		select j_id from jurisdiction where id = (select j_id from permissions_association where u_id = #{u_id})
+	</select>
+
+	<!-- 为超管||管理显示所有的项目 -->
+	<select id="DisplayAllProject" resultType="com.nino.engineer.domain.Project">
+        select id,p_name,p_creator,p_time,l_id,p_weather,p_ambient from project ${_parameter}
+    </select>
+
+	<!-- 根据项目id查询 -->
+	<select id="According_toID" resultType="com.nino.engineer.domain.Project">
+		select
+		id,p_name,p_creator,p_time,l_id,p_weather,p_ambient
+		from project
+		where
+		id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 查询项目名是否重复-->
+	<select id="IsRepeat" resultType="com.nino.engineer.domain.Project">
+		select id,p_name,p_creator,p_time,l_id,p_weather,p_ambient from project where p_name = #{_parameter}
+	</select>
+
+	<!-- 添加地址数据 -->
+	<insert id="Add_address_info" parameterType="com.nino.engineer.domain.Location" flushCache="true" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		location(u_id,username,l_Building,l_layer,l_household,l_detailed,project_location,l_region,l_detailed_address)
+		values
+		(
+		#{u_id},
+		#{username},
+		#{l_Building},
+		#{l_layer},
+		#{l_household},
+		#{l_detailed},
+		#{project_location},
+		#{l_region},
+		#{l_detailed_address}
+		)
+	</insert>
+
+	<!-- 添加项目信息-->
+	<insert id="Create_Project" parameterType="com.nino.engineer.domain.Project" flushCache="true" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        project(p_name,p_creator,p_time,l_id,p_weather,p_ambient)
+        values
+            (
+            #{p_name},
+            #{p_creator},
+            #{p_time},
+            #{l_id},
+            #{p_weather},
+            #{p_ambient}
+            )
+    </insert>
+
+	<!-- 添加项目状态信息 -->
+	<insert id="AddProjectStatusInfo" parameterType="com.nino.engineer.domain.Project_status" flushCache="true" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        project_status(u_id,username,p_id,p_s)
+        values
+            (
+            #{u_id},
+            #{username},
+            #{p_id},
+            #{p_s}
+            )
+    </insert>
+
+	<!-- 添加项目权限信息 -->
+	<insert id="Add_project_permission_information" parameterType="com.nino.engineer.domain.Permissions_detailed" flushCache="true">
+        insert into
+        permissions_detailed(u_id,username,j_id,p_id)
+        values
+            (
+            #{u_id},
+            #{username},
+            #{j_id},
+            #{p_id}
+            )
+    </insert>
 </mapper>

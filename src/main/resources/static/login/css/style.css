@@ -42,9 +42,8 @@ img {
 	border: 0
 }
 
-@
--ms-viewport {
-	width: device-width
+@-ms-viewport {
+	/*width: device-width;*/
 }
 
 html {
@@ -1075,25 +1074,18 @@ header .rt_nav li .quit_icon:before {
 	margin-top: 20%
 }
 
-@
--webkit-keyframes loading_icon { 0%{
+@-webkit-keyframes loading_icon { 0%{
 	transform: scaleY(1);
 	-moz-transform: scaleY(1);
 	-webkit-transform: scaleY(1)
 }
 
 50%{
-transform
-:scaleY
-(
-.4
-);-moz-transform
-:scaleY
-(
+transform:scaleY(.4);
+	-moz-transform:scaleY(
 .4
 );-webkit-transform
-:scaleY
-(
+:scaleY(
 .4
 )
 }
@@ -1102,29 +1094,23 @@ transform
 :scaleY(1)
 ;-moz-transform
 :scaleY(1)
-;-webkit-transform
-:scaleY(1)
+;-webkit-transform:scaleY(1)
 }
 }
-@
--moz-keyframes loading_icon { 0%{
+@-moz-keyframes loading_icon { 0%{
 	transform: scaleY(1);
 	-moz-transform: scaleY(1);
 	-webkit-transform: scaleY(1)
 }
 
 50%{
-transform
-:scaleY
-(
+transform:scaleY(
 .4
 );-moz-transform
-:scaleY
-(
+:scaleY(
 .4
 );-webkit-transform
-:scaleY
-(
+:scaleY(
 .4
 )
 }
