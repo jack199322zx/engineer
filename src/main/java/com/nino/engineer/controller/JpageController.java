@@ -54,6 +54,18 @@ public class JpageController {
         }
     }
 
+    /**
+     * 判断用户是否登陆
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @ApiOperation(value="判断用户是否登陆", notes="无参,返回(true||false)")
+    @RequestMapping(value = "log/Islogin",method = RequestMethod.GET)
+    public boolean isLogin(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        return jpageService.isLogin(request, response);
+    }
+
+
 
     /**
      * 用户登陆API

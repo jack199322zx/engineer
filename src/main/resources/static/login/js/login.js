@@ -15,7 +15,8 @@ function login() {
     	},function (result){
             console.log(result);
             if(result.code==="0"){
-                location.href = "/index";
+                location.href = '/index';
+                location.reload();
             } else {
                 $('.loading').remove();
                 popup({type:'error',msg:result.message,delay:1500,bg:true});
