@@ -1,9 +1,0 @@
-MySQL出现错误:
-errMsg:
-org.apache.ibatis.exceptions.PersistenceException: 
-### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
-### The error may exist in com/SQLTo_configure/mapping/Location.xml
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: select id,u_id,username,l_Building,l_layer,l_household,l_detailed,project_location,l_region,l_detailed_address         from location where id in
-### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2

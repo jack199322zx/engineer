@@ -1,9 +1,0 @@
-MySQL出现错误:
-errMsg:
-org.apache.ibatis.exceptions.PersistenceException: 
-### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '0,10' at line 1
-### The error may exist in com/SQLTo_configure/mapping/Project.xml
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: select id,p_name,p_creator,p_time,l_id,p_weather,p_ambient from project 0,10
-### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '0,10' at line 1

@@ -1,9 +1,8 @@
 package com.nino.engineer.controller;
 
+import com.github.pagehelper.StringUtil;
 import com.nino.engineer.dao.ConfigurationDao;
-import com.nino.engineer.domain.Configure;
-import com.nino.engineer.domain.Result;
-import com.nino.engineer.domain.User;
+import com.nino.engineer.domain.*;
 import com.nino.engineer.service.JpageService;
 import com.nino.engineer.utils.date.GetTodayTime;
 import com.nino.engineer.utils.mail.Main;
@@ -34,37 +33,31 @@ public class JpageController {
     @Autowired
     ConfigurationDao configurationDao;
 
+    @ApiOperation(value="判断是否登陆", notes="无参")
+    @RequestMapping(value = "log/Islogin",method = {RequestMethod.GET,RequestMethod.POST})
+    public boolean Islogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return jpageService.isLogin(request,response);
+    }
+
     @ApiOperation(value="跳转_登陆页面", notes="无参")
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    @RequestMapping(value = "login",method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView jumpLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
         if(jpageService.isLogin(request,response)){
-            return new ModelAndView("/index");
+            return new ModelAndView("index");
         } else {
             return new ModelAndView("/login/login.html");
         }
     }
 
     @ApiOperation(value="跳转_主页", notes="无参")
-    @GetMapping("/index")
+    @RequestMapping(value = "index", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView jumpIndex (HttpServletRequest request, HttpServletResponse response) throws IOException {
         if(jpageService.isLogin(request,response)){
             return new ModelAndView("/index/index.html");
         } else {
-            return new ModelAndView("/login");
+            return new ModelAndView("login");
         }
     }
-
-    /**
-     * 判断用户是否登陆
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    @ApiOperation(value="判断用户是否登陆", notes="无参,返回(true||false)")
-    @RequestMapping(value = "log/Islogin",method = RequestMethod.GET)
-    public boolean isLogin(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        return jpageService.isLogin(request, response);
-    }
-
 
 
     /**
@@ -246,6 +239,7 @@ public class JpageController {
                                         .U_email(email)
                                         .U_company(company)
                                         .U_telephone(telephone)
+                                        .U_company(company)
                                         .U_department(department)
                                         .build();
                                 /* 提交信息  完成  注册 */
@@ -274,6 +268,110 @@ public class JpageController {
         }
     }
 
+
+    @ApiOperation(value = "获取创建项目页面", notes = "无参")
+    @RequestMapping(value = "/c_page", method = RequestMethod.POST)
+    public @ResponseBody
+    Result Cre_page(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        /* 判断是否登陆 */
+        if (jpageService.isLogin(request,response)) {
+            /* 创建项目 需要 有 管理员 的权力 */
+            if(jpageService.Matching_user_rights((Integer) request.getSession().getAttribute("u_id"),2)){
+                return Result.ok("[{\"url\":\"/create/createProject.html\"}]");
+            } else {
+                return Result.fail("1","不具备创建的权力");
+            }
+        } else {
+            return Result.fail("1", "请先登陆");
+        }
+    }
+
+
+    @ApiOperation(value = "创建项目", notes = "传入相关数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "p_name", value = "项目名称", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "l_id", value = "项目地址参数", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "p_weather", value = "当时天气", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "p_ambient", value = "周围环境", required = true, dataType = "String", paramType = "query")
+    })
+    @RequestMapping(value = "/c_pro", method = RequestMethod.POST)
+    public Result Cre_pro(String p_name, String l_id, String p_weather, String p_ambient, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        /* 验证是否登陆 */
+        if (jpageService.isLogin(request,response)) {
+            /* 创建项目 需要 有 管理员 的权力 */
+            if(jpageService.Matching_user_rights((Integer) request.getSession().getAttribute("u_id"),2)){
+                /* 项目名不能重复 */
+                if(jpageService.IsRepeat(p_name)){
+                    /* 添加地址信息 */
+                    Location location = Location.builder()
+                            .U_id((Integer) request.getSession().getAttribute("u_id"))
+                            .Username((String) request.getSession().getAttribute("username"))
+                            .Project_location(l_id)
+                            .build();
+                    /* 存储地址数据 */
+                    if(jpageService.Add_address_info(location)){
+                        /* 配置项目基本信息 */
+                        Project project = Project.builder()
+                                .P_name(p_name)
+                                .P_weather(p_weather)
+                                .P_ambient(p_ambient)
+                                .P_time(new GetTodayTime().NetworkTime())
+                                .L_id(location.getId())
+                                .P_creator((String) request.getSession().getAttribute("username"))
+                                .build();
+                        /* 添加项目数据 */
+                        if(jpageService.Create_Project(project)){
+                            if(project.getId()>0){
+                                /* 配置项目状态info(默认:未完成) */
+                                Project_status project_status = Project_status.builder()
+                                        .U_id((Integer) request.getSession().getAttribute("u_id"))
+                                        .Username((String) request.getSession().getAttribute("username"))
+                                        .P_id(project.getId())
+                                        .P_s("未完成")
+                                        .build();
+                                /* 添加项目状态 */
+                                if(jpageService.AddProjectStatusInfo(project_status)){
+                                    /* 配置项目权限信息(默认:管理员) */
+                                    Permissions_detailed permissions_detailed = Permissions_detailed.builder()
+                                            .U_id((Integer) request.getSession().getAttribute("u_id"))
+                                            .Username((String) request.getSession().getAttribute("username"))
+                                            .J_id(1)
+                                            .P_id(project.getId())
+                                            .build();
+                                    /* 添加权限信息 */
+                                    if(jpageService.Add_project_permission_information(permissions_detailed)){
+                                        return Result.ok("");
+                                    } else {
+                                        return Result.fail("1", "配置项目权限时失败");
+                                    }
+                                } else {
+                                    return Result.fail("1", "添加项目状态时失败");
+                                }
+                            } else {
+                                return Result.fail("1", "创建项目时返回无返回参数");
+                            }
+                        } else {
+                            return Result.fail("1", "项目创建时失败");
+                        }
+                    } else {
+                        return Result.fail("1", "地址信息添加失败");
+                    }
+                } else {
+                    return Result.fail("1", "项目名重复");
+                }
+            } else {
+                return Result.fail("1", "不具备创建的权力");
+            }
+        } else {
+            return Result.fail("1", "请先登陆");
+        }
+    }
+
+
     /**
      * 正则验证是否是整数
      * @param str
@@ -283,5 +381,4 @@ public class JpageController {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
     }
-
 }

@@ -1,5 +1,0 @@
-MySQL出现错误:
-errMsg:
-org.apache.ibatis.exceptions.PersistenceException: 
-### Error querying database.  Cause: java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.SQLTo_configure.mapping.File_Info.Matching
-### Cause: java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.SQLTo_configure.mapping.File_Info.Matching
