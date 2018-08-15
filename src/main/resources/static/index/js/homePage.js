@@ -1,5 +1,5 @@
 ﻿/* 首页js */
-get_pro("1");
+//get_pro("1");
 /* 调取首页API */
 function get_pro(page) {
     $(".content-wrapper").show();
@@ -102,7 +102,6 @@ function get_pro(page) {
                     popup({type:'error',msg:result.errMsg,delay:1500,bg:true});
                 }
             });
-
         },
         error : function(jqXHR, textStatus, errorThrown) {
             popup({type:'error',msg:"ajax调用失败",delay:1500,bg:true});
@@ -137,7 +136,7 @@ function getzf(num){
 
 /* 加载创建项目Page */
 $(".create_pro").click(function () {
-    loadPage("/cre/c_page");
+    loadPage("/create/c_page");
 })
 
 /* 加载设置项目子管理Page */
@@ -160,11 +159,11 @@ function loadPage(url) {
         $(".content-wrapper").hide();
         $.each(result,function (i,result) {
             console.log(result)
-            if(result.errMsg == "OK"){
+            if(result.code === '0'){
                 /* 加载页面 */
-                $(".Other_pages").load(result.url);
+                $(".Other_pages").load(result.data);
             } else {
-                popup({type:'error',msg:result.errMsg,delay:1500,bg:true});
+                popup({type:'error',msg:result.message,delay:1500,bg:true});
             }
         })
     })

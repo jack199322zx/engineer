@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>后台管理系统</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- 判断用户是否登陆
+  <script src="/js/Islogin.js"></script>-->
+  <!-- loading.css -->
+  <link rel="stylesheet" type="text/css" href="/loading/css/dialog.css">
+  <!-- loading.css end -->
+  <link rel="stylesheet" href="/index/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/index/css/_all-skins.min.css">
+  <link rel="stylesheet" href="/index/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/index/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/index/css/paging_stylesheet.css">
+  <style>
+    /* 自定义 */
+    .nen{
+      animation: zhuan 2.0s infinite linear;
+      animation-name: zhuan;
+      animation-duration: 2s;
+      animation-timing-function: linear;
+      animation-delay: initial;
+      animation-iteration-count: infinite;
+      animation-direction: initial;
+      animation-fill-mode: initial;
+      animation-play-state: initial;
+      transition:all 9s;
+    }
+    @keyframes zhuan {
+      10%{
+        transform: rotateZ(36deg);
+      }
+      20%{
+        transform: rotateZ(72deg);
+      }
+      30%{
+        transform: rotateZ(108deg);
+      }
+      40%{
+        transform: rotateZ(144deg);
+      }
+      50%{
+        transform: rotateZ(180deg);
+      }
+      60%{
+        transform: rotateZ(216deg);
+      }
+      70%{
+        transform: rotateZ(252deg);
+      }
+      80%{
+        transform: rotateZ(288deg);
+      }
+      90%{
+        transform: rotateZ(324deg);
+      }
+      100%{
+        transform: rotateZ(360deg);
+      }
+    }
+  </style>
+  <!-- loading.js -->
+  <script src="/loading/js/zepto.min.js"></script>
+  <script type="text/javascript" src="/loading/js/dialog.min.js"></script>
+  <!-- loading.js end -->
+</head>
+<body class="skin-blue sidebar-mini" style="height: auto; min-height: 100%;">
+<div class="wrapper" style="height: auto; min-height: 100%;">
+
+  <aside class="main-sidebar">
+    <section class="sidebar" style="height: auto;">
+      <ul class="sidebar-menu tree" data-widget="tree">
+        <li class="header">菜单</li>
+        <li class="treeview">
+          <a href="javascript:void(0)">
+            <i class="fa fa-tasks"></i> <span>现场管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+
+          <ul class="treeview-menu" style="display: none;">
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 进度信息</a>
+            </li>
+
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 巡视检查</a>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 平行检查</a>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 旁站记录</a>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 举牌验收</a>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 材料进场</a>
+            </li>
+
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="javascript:void(0)">
+            <i class="fa fa-tasks"></i> <span>收发文管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+
+          <ul class="treeview-menu" style="display: none;">
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 通知单</a>
+            </li>
+
+
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-circle-o"></i> 联系单</a>
+            </li>
+
+          </ul>
+        </li>
+
+        <li>
+          <a href="javascript:void(0)"><i class="fa fa-table"></i><span>日志汇总</span></a>
+        </li>
+
+        <li class="header">管理员菜单</li>
+
+        <li class="create_pro">
+          <a href="javascript:void(0)"><i class="fa fa-navicon"></i><span>创建项目</span></a>
+        </li>
+
+        <li class="Submanagement">
+          <a href="javascript:void(0)"><i class="fa fa-asterisk"></i><span>设置项目子管理</span></a>
+        </li>
+
+      </ul>
+    </section>
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="min-height: 901px;">
+    <!-- 公告  -->
+    <section class="content-header">
+      <h1>系统公告&通知
+      </h1>
+    </section>
+    <!-- 定义公告 -->
+    <section class="content" id="bulletin" style="min-height:0px"></section>
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>监理工作系统<small>主页</small></h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row" style="position: relative">
+
+        <div class="col-md-3" style="width: 70%;">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">收发消息</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="">
+              <p>发出销项(10)&nbsp;已回复销项(10)&nbsp;已回复销项(*)&nbsp;待回复销项(*)&nbsp;升级成通知单销项(*)</p>
+              <p>发出通知单(*) 已回复通知单(*) 跟踪中的(待回复)通知单(*)</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+
+        <div class="col-md-3" style="position: absolute;right: 5px">
+          <!-- DIRECT CHAT SUCCESS -->
+          <div class="box box-success direct-chat direct-chat-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">项目通知</h3>
+
+            </div>
+            <div class="box-body">
+              <div class="direct-chat-messages">
+                由子管理权限在所 在项目发出通知， 通知位置在此
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3" style="width: 70%;">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">收发消息</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="">
+              <p>昨日施工情况</p>
+              <p>填写昨天填写的全部内容(个人)</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+
+        <div class="col-md-3" style="width: 70%;">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">收发消息</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="">
+              <p>待办事项</p>
+              <p>发文未回复(包括销项)</p>
+              <p>申请未审批</p>
+              <p>...</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+
+        <div class="col-md-3" style="width: 70%;">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">收发消息</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="">
+              <p>昨日进场材料</p>
+              <p>材料名称</p>
+              <p>数量</p>
+              <p>用于部位</p>
+              <p>发起人名称(回复人)</p>
+              <p>...</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+
+      </div>
+    </section>
+  </div>
+  <div class="Other_pages"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="/index/js/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/index/js/bootstrap.min.js"></script>
+<!-- 分页js -->
+<script type="text/javascript" src="/js/layui.js"></script>
+<!-- 分页js end -->
+<!-- 获取首页数据js -->
+<script src="/index/js/homePage.js"></script>
+<!-- FastClick -->
+<script src="/index/js/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/index/js/adminlte.min.js"></script>
+<!-- Sparkline -->
+<script src="/index/js/jquery.sparkline.min.js"></script>
+<!-- jvectormap  -->
+<script src="/index/js/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="/index/js/jquery-jvectormap-world-mill-en.js"></script>
+<!-- SlimScroll -->
+<script src="/index/js/jquery.slimscroll.min.js"></script>
+<!-- ChartJS -->
+<script src="/index/js/Chart.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/index/js/demo.js"></script>
+<!-- 系统公告js -->
+<script src="/index/js/SystemBulletin.js"></script>
+<!-- ajax 错误信息 -->
+<script src="/js/errMsg.js"></script>
+
+<div class="jvectormap-label" style="left: 468px; top: 645px; display: none;">Greenland</div></body>
+</body>
+</html>

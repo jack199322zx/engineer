@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.PermissionsDetailedDao">
+
+    <!-- 查询用户所属的项目 -->
+    <select id="usersProject" resultType="com.nino.engineer.domain.Permissions_detailed">
+        select id,u_id,username,j_id,p_id from permissions_detailed where p_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </select>
+
+
+    <!-- 获取所有与用户相关的项目 -->
+    <select id="displayAllProjectAccordingToUserID" resultType="com.nino.engineer.domain.Permissions_detailed">
+        select id,u_id,username,j_id,p_id from permissions_detailed where u_id = ${_parameter}
+    </select>
+
+    <!-- 属于用户的项目总数 -->
+    <select id="userProNumber">
+        select count(*) from permissions_detailed where u_id = #{_parameter}
+    </select>
+
+    <!-- 添加项目权限信息 -->
+    <insert id="addProjectPermissionInformation" parameterType="com.nino.engineer.domain.Permissions_detailed" flushCache="true">
+        insert into
+        permissions_detailed(u_id,username,j_id,p_id)
+        values
+            (
+            #{u_id},
+            #{username},
+            #{j_id},
+            #{p_id}
+            )
+    </insert>
+
+
+    <!-- 查询项目中的权限 -->
+    <select id="isHavePower">
+       select j_id from jurisdiction where id = (select j_id from permissions_detailed where ${_parameter})
+    </select>
+
+</mapper>

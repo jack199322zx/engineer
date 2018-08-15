@@ -3,7 +3,6 @@ function login_switch(hide,show) {
     $(hide).hide();
     $(show).show();
 }
-
 /* 调取登陆API */
 function login() {
     /* 不能低于5位数 */
@@ -14,16 +13,13 @@ function login() {
     		password:$('#admin_login input[name="password"]').val()
     	},function (result){
             console.log(result);
-            if(result.code==="0"){
-                location.href = '/index';
+            if(result.code=="0"){
+                location.href = "/index";
                 location.reload();
             } else {
                 $('.loading').remove();
                 popup({type:'error',msg:result.message,delay:1500,bg:true});
             }
-            // $.each(result,function (i, result) {
-            //
-            // });
     	});
     }else{
         /* 去掉loading */
@@ -31,7 +27,6 @@ function login() {
         popup({type:'error',msg:"用户名或密码长度小于5",delay:1500,bg:true});
     }
 }
-
 /* 调取注册API */
 function register() {
     /* 不能低于5位数 */
@@ -43,7 +38,7 @@ function register() {
                 /* 调用注册API */
                 $("body").append('<div class="loading"><div class="mask"></div>' +
                     '<div id="animationTipBox" style="width: 180px; height: 150px; margin-left: -90px; margin-top: -75px;"><div class="load"><div class="icon_box"><div class="cirBox1"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox2"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox3"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div></div></div><div class="dec_txt">加载中...</div></div></div>');
-                $.post("/reg/reg",{
+                $.post("/reg",{
                     username:$('#register input[name="username"]').val(),
                     password:$('#register input[name="password"]').val(),
                     email:$('#register input[name="email"]').val(),
@@ -69,7 +64,6 @@ function register() {
         popup({type:'error',msg:"用户名或密码长度小于5",delay:1500,bg:true});
     }
 }
-
 /* 获取邮箱验证码 */
 function email_code(){
 	/* 验证邮箱 */
@@ -87,7 +81,6 @@ function email_code(){
 		Prohibit();
 	}
 }
-
 /* 设置 禁止60s 方法*/
 var wait = 60;
 function Prohibit() {
@@ -109,7 +102,6 @@ function Prohibit() {
         }, 1000)
     }
 }
-
 /* 验证 邮箱格式*/
 function Verifying_email_address(obj) {
     var text = $(obj).val();

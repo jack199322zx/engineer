@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.LocationDao">
+
+    <!-- 根据 地址 ID 查找数据 -->
+    <select id="accordingToaddressID" resultType="com.nino.engineer.domain.Location">
+        select id,u_id,username,l_Building,l_layer,l_household,l_detailed,project_location,l_region,l_detailed_address
+        from location where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.l_id}
+        </foreach>
+    </select>
+
+    <!-- 添加地址数据 -->
+    <insert id="addAddressInfo" parameterType="com.nino.engineer.domain.Location" flushCache="true" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        location(u_id,username,l_Building,l_layer,l_household,l_detailed,project_location,l_region,l_detailed_address)
+        values
+        (
+        #{u_id},
+        #{username},
+        #{l_Building},
+        #{l_layer},
+        #{l_household},
+        #{l_detailed},
+        #{project_location},
+        #{l_region},
+        #{l_detailed_address}
+        )
+    </insert>
+
+</mapper>

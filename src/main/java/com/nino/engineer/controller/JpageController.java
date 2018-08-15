@@ -1,9 +1,8 @@
 package com.nino.engineer.controller;
 
+import com.github.pagehelper.StringUtil;
 import com.nino.engineer.dao.ConfigurationDao;
-import com.nino.engineer.domain.Configure;
-import com.nino.engineer.domain.Result;
-import com.nino.engineer.domain.User;
+import com.nino.engineer.domain.*;
 import com.nino.engineer.service.JpageService;
 import com.nino.engineer.utils.date.GetTodayTime;
 import com.nino.engineer.utils.mail.Main;
@@ -34,37 +33,31 @@ public class JpageController {
     @Autowired
     ConfigurationDao configurationDao;
 
+    @ApiOperation(value="判断是否登陆", notes="无参")
+    @RequestMapping(value = "log/Islogin",method = {RequestMethod.GET,RequestMethod.POST})
+    public boolean Islogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return jpageService.isLogin(request,response);
+    }
+
     @ApiOperation(value="跳转_登陆页面", notes="无参")
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    @RequestMapping(value = "login",method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView jumpLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
         if(jpageService.isLogin(request,response)){
-            return new ModelAndView("/index");
+            return new ModelAndView("index");
         } else {
             return new ModelAndView("/login/login.html");
         }
     }
 
     @ApiOperation(value="跳转_主页", notes="无参")
-    @GetMapping("/index")
+    @RequestMapping(value = "index", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView jumpIndex (HttpServletRequest request, HttpServletResponse response) throws IOException {
         if(jpageService.isLogin(request,response)){
             return new ModelAndView("/index/index.html");
         } else {
-            return new ModelAndView("/login");
+            return new ModelAndView("login");
         }
     }
-
-    /**
-     * 判断用户是否登陆
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    @ApiOperation(value="判断用户是否登陆", notes="无参,返回(true||false)")
-    @RequestMapping(value = "log/Islogin",method = RequestMethod.GET)
-    public boolean isLogin(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        return jpageService.isLogin(request, response);
-    }
-
 
 
     /**
@@ -246,6 +239,7 @@ public class JpageController {
                                         .U_email(email)
                                         .U_company(company)
                                         .U_telephone(telephone)
+                                        .U_company(company)
                                         .U_department(department)
                                         .build();
                                 /* 提交信息  完成  注册 */
@@ -274,6 +268,7 @@ public class JpageController {
         }
     }
 
+
     /**
      * 正则验证是否是整数
      * @param str
@@ -283,5 +278,4 @@ public class JpageController {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
     }
-
 }

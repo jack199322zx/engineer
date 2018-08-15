@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.JurisDictionDao">
+
+    <!-- 匹配用户权限-->
+    <select id="matchingUserRights">
+        select j_id from jurisdiction where id = (select j_id from permissions_association where u_id = #{u_id})
+    </select>
+
+</mapper>

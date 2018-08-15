@@ -60,7 +60,7 @@ $(".submit").click(function () {
         $("body").append('<div class="loading"><div class="mask"></div>' +
             '<div id="animationTipBox" style="width: 180px; height: 150px; margin-left: -90px; margin-top: -75px;"><div class="load"><div class="icon_box"><div class="cirBox1"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox2"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div><div class="cirBox3"><div class="cir1"></div><div class="cir2"></div><div class="cir3"></div><div class="cir4"></div></div></div></div><div class="dec_txt">加载中...</div></div></div>');
         /* 调取创建projectAPI */
-        $.post("/cre/c_pro",{
+        $.post("/create/c_pro",{
             p_name:$("#por_name").val(),
             l_id:$("#pro_address").val(),
             p_weather:$("#pro_weather").val(),

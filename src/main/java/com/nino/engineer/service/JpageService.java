@@ -1,7 +1,7 @@
 package com.nino.engineer.service;
 
 import com.nino.engineer.dao.JpageDao;
-import com.nino.engineer.domain.User;
+import com.nino.engineer.domain.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,6 @@ public class JpageService {
     public boolean register (User user){
         return jpageDao.register(user) > -1;
     }
-
 
     /* 是否存在邮箱地址 */
     public boolean isExistenceMailAddress (String email){

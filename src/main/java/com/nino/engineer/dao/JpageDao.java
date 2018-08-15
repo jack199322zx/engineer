@@ -1,6 +1,6 @@
 package com.nino.engineer.dao;
 
-import com.nino.engineer.domain.User;
+import com.nino.engineer.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

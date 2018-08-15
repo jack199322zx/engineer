@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nino.engineer.dao.FileInfoDao">
+
+    <!-- 匹配单个 MD5 文件 -->
+    <select id="matching" resultType="java.lang.String" >
+        select f_md5 from file_info where f_md5 = #{_parameter}
+    </select>
+
+    <!-- 匹配多个 MD5 值 -->
+    <select id="matchingList" resultType="com.nino.engineer.domain.File_Info" >
+        select id,u_id,p_id,f_modular,f_path,f_network,f_MD5 from file_info
+        where f_md5 in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.F_MD5}
+        </foreach>
+    </select>
+
+    <!-- 添加文件信息 -->
+    <insert id="addFileInfo" parameterType="com.nino.engineer.domain.File_Info" flushCache="true">
+        insert into
+        file_info(u_id,p_id,f_modular,f_path,f_network,f_MD5)
+        values
+        <foreach collection ="list" item="item" index= "index" separator =",">
+            (
+            #{item.u_id},
+            #{item.p_id},
+            #{item.f_modular},
+            #{item.f_path},
+            #{item.f_network},
+            #{item.f_MD5}
+            )
+        </foreach>
+    </insert>
+
+</mapper>
