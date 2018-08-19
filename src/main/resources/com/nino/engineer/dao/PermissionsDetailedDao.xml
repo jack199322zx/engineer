@@ -37,7 +37,15 @@
 
     <!-- 查询项目中的权限 -->
     <select id="isHavePower">
-       select j_id from jurisdiction where id = (select j_id from permissions_detailed where ${_parameter})
+       select j_id from jurisdiction where id = (select j_id from permissions_detailed where u_id = #{userId}, p_id = #{projectId})
     </select>
 
+    <!-- 查询用户权限 -->
+    <select id="judgePermission" resultType="int">
+        select j_id from jurisdiction where id = (select j_id from permissions_detailed where u_id = #{userId})
+    </select>
+
+    <select id="findProjectIdByCreator" parameterType="int">
+        select id from project where p_creator_id = #{id}
+    </select>
 </mapper>

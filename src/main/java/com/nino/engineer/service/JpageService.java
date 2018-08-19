@@ -1,11 +1,14 @@
 package com.nino.engineer.service;
 
 import com.nino.engineer.dao.JpageDao;
+import com.nino.engineer.dao.PermissionsDetailedDao;
 import com.nino.engineer.domain.*;
+import com.nino.engineer.utils.encrypt.MD5Util;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -15,27 +18,27 @@ public class JpageService {
 
     @Autowired
     private JpageDao jpageDao;
+    @Autowired
+    private PermissionsDetailedDao permissionDao;
 
     @SneakyThrows
     public boolean isLogin(HttpServletRequest request, HttpServletResponse response) {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
         return !(request.getSession().getAttribute("u_id")==null||request.getSession().getAttribute("username")==null);
     }
 
     /* 登陆接口 */
-    public boolean matchingLog (String username, String password, HttpServletRequest request){
-        List<User> users = jpageDao.matchingLog(username, password);
-        if(users == null || users.isEmpty()){
-            return false;
-        }else {
-            for(User user : users){
-                /* 添加session信息 */
-                request.getSession().setAttribute("u_id",user.getId());
-                request.getSession().setAttribute("username",user.getUsername());
-            }
+    public boolean matchingLog (String username, String password, HttpServletRequest request, HttpServletResponse response){
+        User user = jpageDao.matchingLog(username, MD5Util.md5(password));
+        /* 添加session信息 */
+        if (user != null) {
+            request.getSession().setAttribute("u_id",user.getId());
+            request.getSession().setAttribute("username",user.getUsername());
+            Cookie cookie = new Cookie("PERMISSION", "_RIGHT:" + permissionDao.judgePermission(user.getId()));
+            cookie.setPath("/");
+            response.addCookie(cookie);
             return true;
         }
+        return false;
     }
 
 

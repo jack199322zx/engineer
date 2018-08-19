@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class LogClass {
 
-	public static String log_path = "D:\\IdeaProjects\\InnovationEngineering\\src\\main\\resource\\static\\log\\";
+	public static String log_path = "log";
 	
     public static void logResult(String sWord) {
     	String time = new GetTodayTime().GetNetworkTodayTime("yyyy-MM-dd");
@@ -23,7 +23,7 @@ public class LogClass {
     	}
         FileWriter writer = null;
         try {
-            writer = new FileWriter(log_path + time + "\\" + new GetTodayTime().GetNetworkTodayTime("yyyy-MM-dd HH时mm分ss秒") +".txt");
+            writer = new FileWriter(log_path + time + File.separator + new GetTodayTime().GetNetworkTodayTime("yyyy-MM-dd HH时mm分ss秒") +".txt");
             writer.write(sWord);
         } catch (Exception e) {
             e.printStackTrace();

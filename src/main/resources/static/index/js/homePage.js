@@ -136,7 +136,7 @@ function getzf(num){
 
 /* 加载创建项目Page */
 $(".create_pro").click(function () {
-    loadPage("/create/c_page");
+    loadPage("/project/c_page");
 })
 
 /* 加载设置项目子管理Page */

@@ -19,7 +19,7 @@ import java.util.Date;
 public class Project {
 	private int Id;
 	private String P_name;
-	private String P_creator;
+	private String P_creator_Id;
 	private Date P_time;
 	private int L_id;
 	private String P_weather;

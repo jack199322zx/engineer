@@ -4,7 +4,7 @@
 
     <!-- 匹配用户登陆 -->
     <select id="matchingLog" resultType="com.nino.engineer.domain.User">
-		select id,username from t_user where username= #{Username} and password=#{Password}
+		select id 'Id',username 'Username' from t_user where username= #{Username} and password=#{Password}
 	</select>
 
     <!-- 邮箱是否存在 -->

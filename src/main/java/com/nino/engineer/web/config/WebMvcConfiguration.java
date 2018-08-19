@@ -21,7 +21,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationInterceptor);
+        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/**").excludePathPatterns("/**/*.html", "/**/*.js", "/**/*.css");
     }
 
     @Override

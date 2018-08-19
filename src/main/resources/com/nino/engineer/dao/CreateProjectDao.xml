@@ -51,11 +51,11 @@ values
     <insert id="Create_Project" parameterType="com.nino.engineer.domain.Project" flushCache="true"
             useGeneratedKeys="true" keyProperty="id">
 insert into
-project(p_name,p_creator,p_time,l_id,p_weather,p_ambient)
+project(p_name,p_creator_id,p_time,l_id,p_weather,p_ambient)
 values
 (
 #{p_name},
-#{p_creator},
+#{p_creator_id},
 #{p_time},
 #{l_id},
 #{p_weather},
@@ -125,7 +125,7 @@ values
     </select>
 
     <!-- 添加项目状态信息 -->
-    <insert id="Add_project_statusInfo" parameterType="com.pojo.Project_status" flushCache="true" useGeneratedKeys="true" keyProperty="id">
+    <insert id="Add_project_statusInfo" parameterType="com.nino.engineer.domain.Project_status" flushCache="true" useGeneratedKeys="true" keyProperty="id">
         insert into
         project_status(u_id,username,p_id,p_s)
         values

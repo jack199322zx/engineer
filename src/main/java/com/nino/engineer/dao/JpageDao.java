@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface JpageDao {
 
-    List<User> matchingLog(@Param("Username") String userName,@Param("Password") String password);
+    User matchingLog(@Param("Username") String userName,@Param("Password") String password);
     User isExistenceMailAddress(String email);
     User isExistenceTelephone(String phone);
     User isExistenceUsername(String userName);

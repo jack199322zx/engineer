@@ -5,7 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.nino.engineer.dao.CreateProjectDao;
 import com.nino.engineer.dao.PermissionsDetailedDao;
+import com.nino.engineer.dao.SystemDao;
 import com.nino.engineer.domain.*;
+import com.nino.engineer.domain.dto.System;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,6 +29,8 @@ public class CreateProjectService {
     CreateProjectDao dao;
     @Autowired
     PermissionsDetailedDao detailedDao;
+    @Autowired
+    SystemDao systemDao;
     /* 是否具有某种权力 */
     public boolean Matching_user_rights (int u_id,int j_id){
         return j_id >= dao.Matching_user_rights(u_id,j_id);
@@ -100,4 +104,10 @@ public class CreateProjectService {
     public boolean Add_project_statusInfo (Project_status project_status) {
         return dao.Add_project_statusInfo(project_status) > 0;
     }
+
+    public System findSystemInfo() {
+       String notify = systemDao.findSystemNotify();
+       return null;
+    }
+
 }

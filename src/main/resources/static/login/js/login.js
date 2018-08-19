@@ -15,7 +15,6 @@ function login() {
             console.log(result);
             if(result.code=="0"){
                 location.href = "/index";
-                location.reload();
             } else {
                 $('.loading').remove();
                 popup({type:'error',msg:result.message,delay:1500,bg:true});
@@ -69,7 +68,7 @@ function email_code(){
 	/* 验证邮箱 */
 	if(Verifying_email_address('#register input[name="email"]')){
 		/* 调用发送邮件API */
-		$.post("/reg/SendMail",{
+		$.post("/reg/send-mail",{
             MailAddress:$('#register input[name="email"]').val()
 		},function (e) {
             if(e.code!="0"){

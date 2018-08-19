@@ -1,10 +1,13 @@
 package com.nino.engineer.controller;
 
 import com.github.pagehelper.StringUtil;
+import com.nino.engineer.common.annotation.StaffType;
+import com.nino.engineer.common.annotation.SysPermission;
 import com.nino.engineer.dao.ConfigurationDao;
 import com.nino.engineer.domain.*;
 import com.nino.engineer.service.JpageService;
 import com.nino.engineer.utils.date.GetTodayTime;
+import com.nino.engineer.utils.encrypt.MD5Util;
 import com.nino.engineer.utils.mail.Main;
 import com.nino.engineer.utils.message.SendShortMessage;
 import com.nino.engineer.utils.random.Generating_order_number;
@@ -22,7 +25,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
 
-
 @RestController
 @Api(value = "跳转页面用,URL不显示详细地址")
 public class JpageController {
@@ -33,32 +35,22 @@ public class JpageController {
     @Autowired
     ConfigurationDao configurationDao;
 
-    @ApiOperation(value="判断是否登陆", notes="无参")
-    @RequestMapping(value = "log/Islogin",method = {RequestMethod.GET,RequestMethod.POST})
-    public boolean Islogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return jpageService.isLogin(request,response);
-    }
+    public static Configure config;
+
 
     @ApiOperation(value="跳转_登陆页面", notes="无参")
-    @RequestMapping(value = "login",method = {RequestMethod.GET,RequestMethod.POST})
-    public ModelAndView jumpLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(jpageService.isLogin(request,response)){
-            return new ModelAndView("index");
-        } else {
-            return new ModelAndView("/login/login.html");
-        }
+    @RequestMapping(value = "login",method = RequestMethod.GET)
+    public ModelAndView jumpLogin() {
+        return new ModelAndView("/login/login.html");
     }
 
     @ApiOperation(value="跳转_主页", notes="无参")
-    @RequestMapping(value = "index", method = {RequestMethod.GET,RequestMethod.POST})
-    public ModelAndView jumpIndex (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(jpageService.isLogin(request,response)){
-            return new ModelAndView("/index/index.html");
-        } else {
-            return new ModelAndView("login");
-        }
+    @RequestMapping(value = "index", method = RequestMethod.GET)
+    @SysPermission({StaffType.ALL})
+    public ModelAndView jumpIndex(HttpServletRequest request) {
+        request.getCookies();
+        return new ModelAndView("/index/index.html");
     }
-
 
     /**
      * 用户登陆API
@@ -72,18 +64,14 @@ public class JpageController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String", paramType = "query")
     })//包含一组参数说明。
     @RequestMapping(value = "log/login",method = RequestMethod.POST)
-    public Result loginApi(String username, String password, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-        return jpageService.matchingLog(username,password,request) ? Result.ok("") : Result.fail("1", "账号密码不匹配");
+    public Result loginApi(String username, String password, HttpServletRequest request, HttpServletResponse response){
+        return jpageService.matchingLog(username,password,request,response) ? Result.ok("") : Result.fail("1", "账号密码不匹配");
     }
 
     @ApiOperation(value="发送邮件API", notes="传入邮件地址")
     @ApiImplicitParam(name = "MailAddress", value = "邮件地址", required = true, dataType = "String", paramType = "query")
-    @RequestMapping(value = "reg/SendMail",method = RequestMethod.POST)
-    public Result sendMailAPI(String MailAddress, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
+    @RequestMapping(value = "reg/send-mail",method = RequestMethod.POST)
+    public Result sendMailAPI(String MailAddress, HttpServletRequest request, HttpServletResponse response) {
         boolean Isallow = false;
         /* 禁止60s内调用 */
         if(request.getSession().getAttribute("mail_time") == null){
@@ -99,18 +87,16 @@ public class JpageController {
             }
         }
         if(Isallow){
-
             /* 删除session */
             request.getSession().removeAttribute("mail_code");
             request.getSession().removeAttribute("mail_address");
             request.getSession().removeAttribute("mail_time");
-
             /* 判断邮箱是否存在 */
             if(jpageService.isExistenceMailAddress(MailAddress)){
                 /* 生成6为数验证码 */
                 String code = new Generating_order_number().getItemID(6);
                 /* 当邮箱不存在时,发送邮件 */
-                if(Main.sendMailByQQ(configurationDao.readConfigure(), MailAddress, "邮箱验证码", "您的验证码是:" + code).equals("Success")){
+                if(Main.sendMailByQQ(readConfig(), MailAddress, "邮箱验证码", "您的验证码是:" + code).equals("Success")){
 
                     /* 存入session:code */
                     request.getSession().setAttribute("mail_code",code);
@@ -142,11 +128,8 @@ public class JpageController {
      */
     @ApiOperation(value="发送短信API", notes="传入手机号码")
     @ApiImplicitParam(name = "telephone", value = "手机号码", required = true, dataType = "String", paramType = "query")
-    @RequestMapping(value = "/SendShortMessage",method = RequestMethod.POST)
+    @RequestMapping(value = "/send-short-message",method = RequestMethod.POST)
     public Result sendShortMessageAPI(String telephone, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
         boolean Isallow = false;
         /* 禁止60s内调用 */
         if(request.getSession().getAttribute("ShortMessage_time") == null){
@@ -162,7 +145,6 @@ public class JpageController {
             }
         }
         if(Isallow){
-
             /* 删除session */
             request.getSession().removeAttribute("ShortMessage_code");
             request.getSession().removeAttribute("Telephone");
@@ -175,7 +157,7 @@ public class JpageController {
                     /* 生成6为数验证码 */
                     String code = new Generating_order_number().getItemID(6);
                     /* 发送短信 */
-                    if(SendShortMessage.shortMessage(configurationDao.readConfigure(), telephone,code)){
+                    if(SendShortMessage.shortMessage(readConfig(), telephone,code)){
 
                         /* 存人session:ShortMessage_code */
                         request.getSession().setAttribute("ShortMessage_code",code);
@@ -183,7 +165,6 @@ public class JpageController {
                         request.getSession().setAttribute("Telephone",telephone);
                         /* 存人session:ShortMessage_time */
                         request.getSession().setAttribute("ShortMessage_time",new GetTodayTime().DateConversion_to_Milliseconds(new GetTodayTime().GetNetworkTodayTime("yyyy-MM-dd HH:mm:ss"),"yyyy-MM-dd HH:mm:ss")+60000);
-
                         return Result.ok("");
                     } else {
                         return Result.fail("1", "短信发送失败");
@@ -217,10 +198,6 @@ public class JpageController {
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public Result register(String username, String password, String email, String code, String telephone, String company, String department,
                                    HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-
         /* 验证 邮箱 验证码 */
         if(request.getSession().getAttribute("mail_code") != null){
             if(request.getSession().getAttribute("mail_code").equals(code)&&request.getSession().getAttribute("mail_address").equals(email)){
@@ -235,7 +212,7 @@ public class JpageController {
                                 /* 生成 user 实体 */
                                 User user = User.builder()
                                         .Username(username)
-                                        .Password(password)
+                                        .Password(MD5Util.md5(password))
                                         .U_email(email)
                                         .U_company(company)
                                         .U_telephone(telephone)
@@ -277,5 +254,15 @@ public class JpageController {
     private boolean isInteger(String str) {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
+    }
+
+    public Configure readConfig() {
+        if (config == null) {
+            synchronized (Configure.class) {
+                if (config == null)
+                    config = configurationDao.readConfigure();
+            }
+        }
+        return config;
     }
 }

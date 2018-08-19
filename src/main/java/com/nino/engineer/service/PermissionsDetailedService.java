@@ -147,4 +147,13 @@ public class PermissionsDetailedService {
         int type =  permissionsDetailedDao.isHavePower(u_id, p_id);
         return j_id >= type && type > 0;
     }
+
+    public int findProjectIdByCreator(int u_id) {
+        return permissionsDetailedDao.findProjectIdByCreator(u_id);
+    }
+
+    public int findPermissionId(int u_id) {
+        return permissionsDetailedDao.judgePermission(u_id);
+    }
+
 }
